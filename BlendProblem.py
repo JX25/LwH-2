@@ -44,14 +44,35 @@ mock_constraints = [
 
 class BlendProblem:
     def __init__(self):
-        self.data_dict = {}
+        self.data_dict = {
+            "products": [],
+            "data": {},
+            "constraints": [],
+        }
+
+    def update_products(self, name, value):
+        print(name, value)
+        name = name.split(";")
+        if name[0] not in self.data_dict["products"]:
+            self.data_dict["products"].append(name[0])
+        if name[1] not in self.data_dict["data"].keys():
+            self.data_dict["data"][name[1]] = {}
+        self.data_dict["data"][name[1]][name[0]] = float(value)
+
+    def update_constrain(self, constrain):
+        print(constrain)
+        if constrain not in self.data_dict["constraints"]:
+            self.data_dict["constraints"].append(constrain)
 
     def solve(self):
-        self.data_dict = {
-            "products": mock_products,
-            "data": mock_data,
-            "constraints": mock_constraints
-        }
+        DEBUG = False
+
+        if DEBUG:
+            self.data_dict = {
+                "products": mock_products,
+                "data": mock_data,
+                "constraints": mock_constraints
+            }
         # Minimalizacja kosztow
         problem = LpProblem("Blending problem", LpMinimize)
 
@@ -83,15 +104,13 @@ class BlendProblem:
                 problem += lpSum(self.data_dict["data"][constrain][i] * problem_vars[i] for i in
                                  self.data_dict["products"]) < float(value)
 
-        # LpSolverDefault.msg = 1
+        LpSolverDefault.msg = 1
         problem.solve()
-        print("Status: ", LpStatus[problem.status])
+        result = "Status: " + LpStatus[problem.status] +"\n"
 
         for i in problem.variables():
-            print(i.name, "-", i.varValue)
+            result += i.name[9:] + " = " + str(i.varValue) + "\n"
 
-        print("Total cost: ", round(problem.objective.value(), 2))
+        result += "Total cost: " + str(round(problem.objective.value(), 2))
+        return result
 
-
-#example = BlendProblem()
-#example.solve()

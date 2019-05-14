@@ -5,7 +5,9 @@ from BlendProblem import BlendProblem
 class BlendProblemApp(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.blend_data = BlendProblem()
+        self.blend_problem = BlendProblem()
+        self.data_var = []
+        self.data_cons = []
         self.createInterface()
 
     def createInterface(self):
@@ -22,8 +24,8 @@ class BlendProblemApp(QWidget):
         add_var = QPushButton("Dodaj zmienną")
 
 
-        condition_var_label = QLabel("Zmienna")
-        condition_label = QLabel("Warunek;wartosc")
+        condition_var_label = QLabel("Warunek")
+        condition_label = QLabel("typ_warunku;wartosc")
         self.cond_var = QLineEdit()
         self.cond = QLineEdit()
         add_cond = QPushButton("Dodaj warunek")
@@ -74,13 +76,44 @@ class BlendProblemApp(QWidget):
         self.show()
 
     def add_variable(self):
-        return None
+        self.blend_problem.update_products(self.var_name.text(), self.var_value.text())
 
     def add_condition(self):
-        return None
+        self.blend_problem.update_constrain(self.cond_var.text() + ";" + self.cond.text())
 
     def solver(self):
-        return None
+        '''
+        self.blend_problem.update_products("oatmeal;protein", "4")
+        self.blend_problem.update_products("oatmeal;energy", "110")
+        self.blend_problem.update_products("oatmeal;calcium", "2")
+        self.blend_problem.update_products("oatmeal;price", "0.30")
+        self.blend_problem.update_products("chicken;protein", "32")
+        self.blend_problem.update_products("eggs;protein", "13")
+        self.blend_problem.update_products("milk;protein", "8")
+        self.blend_problem.update_products("pecan pie;protein", "4")
+        self.blend_problem.update_products("pork and beans;protein", "14")
+        self.blend_problem.update_products("chicken;energy", "205")
+        self.blend_problem.update_products("eggs;energy", "160")
+        self.blend_problem.update_products("milk;energy", "160")
+        self.blend_problem.update_products("pecan pie;energy", "420")
+        self.blend_problem.update_products("pork and beans;energy", "260")
+        self.blend_problem.update_products("chicken;calcium", "12")
+        self.blend_problem.update_products("eggs;calcium", "54")
+        self.blend_problem.update_products("milk;calcium", "285")
+        self.blend_problem.update_products("pecan pie;calcium", "22")
+        self.blend_problem.update_products("pork and beans;calcium", "80")
+        self.blend_problem.update_products("chicken;price", "2.4")
+        self.blend_problem.update_products("eggs;price", "1.3")
+        self.blend_problem.update_products("milk;price", "0.90")
+        self.blend_problem.update_products("pecan pie;price", "2.00")
+        self.blend_problem.update_products("pork and beans;price", "1.90")
+
+        self.blend_problem.update_constrain("protein;>=;55")
+        self.blend_problem.update_constrain("calcium;>=;800")
+        self.blend_problem.update_constrain("energy;>=;2000")
+        '''
+        result = self.blend_problem.solve()
+        self.result_label.setText(result)
 
 
 if __name__ == '__main__':
