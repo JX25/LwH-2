@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton
-from App.BlendProblem import BlendProblem
+from BlendProblem import BlendProblem
 
 
 class BlendProblemApp(QWidget):
